@@ -1,4 +1,5 @@
 #pragma once
+
 #include <cassert>
 #include <stdexcept>
 #include <iostream>
@@ -7,7 +8,7 @@ using namespace std;
 
 inline void Test1() {
     cout << "Basic vector functionality test!" << endl << endl;
-    // Инициализация конструктором по умолчанию
+    // ctor init def
     {
         SimpleVector<int> v;
         assert(v.GetSize() == 0u);
@@ -15,7 +16,7 @@ inline void Test1() {
         assert(v.GetCapacity() == 0u);
     }
 
-    // Инициализация вектора указанного размера
+    // ctor with size
     {
         SimpleVector<int> v(5);
         assert(v.GetSize() == 5u);
@@ -26,7 +27,7 @@ inline void Test1() {
         }
     }
 
-    // Инициализация вектора, заполненного заданным значением
+    //ctor with size and item
     {
         SimpleVector<int> v(3, 42);
         assert(v.GetSize() == 3);
@@ -36,7 +37,7 @@ inline void Test1() {
         }
     }
 
-    // Инициализация вектора при помощи initializer_list
+    // ctor initializer_list
     {
         SimpleVector<int> v{ 1, 2, 3 };
         assert(v.GetSize() == 3);
@@ -44,22 +45,22 @@ inline void Test1() {
         assert(v[2] == 3);
     }
 
-    // Доступ к элементам при помощи At
+    // At function
     {
         SimpleVector<int> v(3);
         assert(&v.At(2) == &v[2]);
         try {
             v.At(3);
-            assert(false);  // Ожидается выбрасывание исключения
+            assert(false);  // !!!!!! out_of range
         }
         catch (const std::out_of_range&) {
         }
         catch (...) {
-            assert(false);  // Не ожидается исключение, отличное от out_of_range
+            assert(false);  // !!!!!!! NONO
         }
     }
 
-    // Очистка вектора
+    // clear
     {
         SimpleVector<int> v(10);
         const size_t old_capacity = v.GetCapacity();
@@ -68,7 +69,7 @@ inline void Test1() {
         assert(v.GetCapacity() == old_capacity);
     }
 
-    // Изменение размера
+    // resize
     {
         SimpleVector<int> v(3);
         v[2] = 17;
@@ -99,16 +100,16 @@ inline void Test1() {
         assert(v[3] == 0);
     }
 
-    // Итерирование по SimpleVector
+    // iterating
     {
-        // Пустой вектор
+        // empty
         {
             SimpleVector<int> v;
             assert(v.begin() == nullptr);
             assert(v.end() == nullptr);
         }
 
-        // Непустой вектор
+        // not empty
         {
             SimpleVector<int> v(10, 42);
             assert(v.begin());
@@ -131,7 +132,7 @@ inline void Test2() {
         assert(v[1] == 42);
     }
 
-    // Если хватает места, PushBack не увеличивает Capacity
+    // Еpush_back no size++
     {
         SimpleVector<int> v(2);
         v.Resize(1);
@@ -152,7 +153,7 @@ inline void Test2() {
         assert((v == SimpleVector<int>{0, 1, 2}));
     }
 
-    // Конструктор копирования
+    // ctor copied
     {
         SimpleVector<int> numbers{ 1, 2 };
         auto numbers_copy(numbers);
@@ -164,7 +165,7 @@ inline void Test2() {
         }
     }
 
-    // Сравнение
+    // asserst with logic
     {
         assert((SimpleVector{ 1, 2, 3 } == SimpleVector{ 1, 2, 3 }));
         assert((SimpleVector{ 1, 2, 3 } != SimpleVector{ 1, 2, 2 }));
@@ -178,7 +179,7 @@ inline void Test2() {
         assert((SimpleVector{ 1, 2, 3 } <= SimpleVector{ 1, 2, 4 }));
     }
 
-    // Обмен значений векторов
+    // swap
     {
         SimpleVector<int> v1{ 42, 666 };
         SimpleVector<int> v2;
@@ -206,7 +207,7 @@ inline void Test2() {
         assert(v2.GetCapacity() == capacity1);
     }
 
-    // Присваивание
+    // operator =
     {
         SimpleVector<int> src_vector{ 1, 2, 3, 4 };
         SimpleVector<int> dst_vector{ 1, 2, 3, 4, 5, 6 };
@@ -214,7 +215,7 @@ inline void Test2() {
         assert(dst_vector == src_vector);
     }
 
-    // Вставка элементов
+    //insert in beg mid end
     {
         SimpleVector<int> v{ 1, 2, 3, 4 };
         SimpleVector<int> v1;
@@ -222,26 +223,9 @@ inline void Test2() {
         SimpleVector<int> v3{ 1, 2, 3, 4 };
         v2.PopBack();
         v2.PopBack();
-
-
-
-        for (auto val : v3) {
-            std::cout << val << ' ';
-        }
-        std::cout << std::endl;
-
+       
         v3.Insert(v3.begin() + v3.GetSize(), 42);
         assert((v3 == SimpleVector<int>{1, 2, 3, 4, 42}));
-
-
-        for (auto val : v3) {
-            std::cout << val << ' ';
-        }
-        std::cout << std::endl;
-        system("PAUSE");
-
-
-
 
         v.Insert(v.begin() + 2, 42);
         assert((v == SimpleVector<int>{1, 2, 42, 3, 4}));
@@ -250,8 +234,6 @@ inline void Test2() {
         assert((v1 == SimpleVector<int>{42}));
 
         v2.Insert(v2.begin() + 1, 42);
-
-
         assert((v2 == SimpleVector<int>{1, 42, 2}));
     }
 

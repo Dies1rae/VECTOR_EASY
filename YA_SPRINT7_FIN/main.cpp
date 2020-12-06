@@ -150,7 +150,8 @@ void TestNoncopiableErase() {
     cout << "Done!" << endl << endl;
 }
 
-int main() {
+void AllTest() {
+    cout << "Start!" << endl << endl;
     Test1();
     Test2();
     TestReserveConstructor();
@@ -163,5 +164,12 @@ int main() {
     TestNoncopiablePushBack();
     TestNoncopiableInsert();
     TestNoncopiableErase();
+    cout << "All Done!" << endl << endl;
+}
+
+int main() {
+
+    AllTest();
+
     return 0;
 }
