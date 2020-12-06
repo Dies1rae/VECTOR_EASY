@@ -33,19 +33,15 @@ public:
     explicit SimpleVector(size_t size) {
         this->capacity_ = size;
         this->size_ = size;
-        this->items_ = new TType[size]();
-        for (size_t ptr = 0; ptr < this->capacity_; ptr++) {
-            this->items_[ptr] = 0;
-        }
+        this->items_ = new TType[this->capacity_]();
+        std::fill(begin(), end(), TType{0});
     }
 
     SimpleVector(size_t size, const TType& value) {
         this->capacity_ = size;
         this->size_ = size;
-        this->items_ = new TType[this->size_]();
-        for (size_t ptr = 0; ptr < this->size_; ptr++) {
-            this->items_[ptr] = value;
-        }
+        this->items_ = new TType[this->capacity_]();
+        std::fill(begin(), end(), value);
     }
 
     SimpleVector(std::initializer_list<TType> init) {
@@ -58,7 +54,7 @@ public:
         if (this != &other) {
             this->size_ = other.size_;
             this->capacity_ = other.capacity_;
-            this->items_ = new TType[other.capacity_];
+            this->items_ = new TType[other.capacity_]();
             std::copy(other.begin(), other.end(), begin());
         }
     }
@@ -76,9 +72,7 @@ public:
         this->capacity_ = obj_.size_;
         this->size_ = 0;
         this->items_ = new TType[obj_.size_]();
-        for (size_t ptr = 0; ptr < this->capacity_; ptr++) {
-            this->items_[ptr] = 0;
-        }
+        std::fill(begin(), end(), TType{0});
     }
 
     ~SimpleVector() {
@@ -86,23 +80,28 @@ public:
     }
 
     SimpleVector& operator=(const SimpleVector& rhs) {
-        if (rhs.size_ < this->capacity_) {
-            std::copy(rhs.begin(), rhs.end(), this->begin());
-            this->size_ = rhs.size_;
-        } else {
-            SimpleVector tmp(std::move(rhs));
-            std::swap(tmp.items_, this->items_);
-            std::swap(tmp.size_, this->size_);
-            std::swap(tmp.capacity_, this->capacity_);
+        if(&rhs != this) {
+            if (rhs.size_ < this->capacity_) {
+                std::copy(rhs.begin(), rhs.end(), this->begin());
+                this->size_ = rhs.size_;
+            }
+            else {
+                SimpleVector tmp(std::move(rhs));
+                std::swap(tmp.items_, this->items_);
+                std::swap(tmp.size_, this->size_);
+                std::swap(tmp.capacity_, this->capacity_);
+            }
         }
         return *this;
     }
 
     SimpleVector& operator=(SimpleVector&& rhs) {
-        SimpleVector tmp(std::move(rhs));
-        std::swap(tmp.items_, this->items_);
-        std::swap(tmp.size_, this->size_);
-        std::swap(tmp.capacity_, this->capacity_);
+        if (&rhs != this) {
+            SimpleVector tmp(std::move(rhs));
+            std::exchange(tmp.items_, this->items_);
+            std::exchange(tmp.size_, this->size_);
+            std::exchange(tmp.capacity_, this->capacity_);
+        }
         return *this;
     }
 
@@ -223,7 +222,7 @@ public:
     }
 
     void Clear() noexcept {
-        std::fill(this->begin(), this->end(), 0);
+        std::fill(this->begin(), this->end(), TType{0});
         this->size_ = 0;
     }
 
