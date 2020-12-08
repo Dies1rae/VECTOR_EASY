@@ -10,111 +10,109 @@ inline void Test1() {
     cout << "Basic vector functionality test!" << endl << endl;
     // ctor init def
     {
-        SimpleVector<int> v;
-        assert(v.GetSize() == 0u);
-        assert(v.IsEmpty());
-        assert(v.GetCapacity() == 0u);
+        SimpleVector<int> test_vector;
+        assert(test_vector.GetSize() == 0u);
+        assert(test_vector.IsEmpty());
+        assert(test_vector.GetCapacity() == 0u);
     }
 
     // ctor with size
     {
-        SimpleVector<int> v(5);
-        assert(v.GetSize() == 5u);
-        assert(v.GetCapacity() == 5u);
-        assert(!v.IsEmpty());
-        for (size_t i = 0; i < v.GetSize(); ++i) {
-            assert(v[i] == 0);
+        SimpleVector<int> test_vector(5);
+        assert(test_vector.GetSize() == 5u);
+        assert(test_vector.GetCapacity() == 5u);
+        assert(!test_vector.IsEmpty());
+        for (size_t i = 0; i < test_vector.GetSize(); ++i) {
+            assert(test_vector[i] == 0);
         }
     }
 
     //ctor with size and item
     {
-        SimpleVector<int> v(3, 42);
-        assert(v.GetSize() == 3);
-        assert(v.GetCapacity() == 3);
-        for (size_t i = 0; i < v.GetSize(); ++i) {
-            assert(v[i] == 42);
+        SimpleVector<int> test_vector(3, 42);
+        assert(test_vector.GetSize() == 3);
+        assert(test_vector.GetCapacity() == 3);
+        for (size_t i = 0; i < test_vector.GetSize(); ++i) {
+            assert(test_vector[i] == 42);
         }
     }
 
     // ctor initializer_list
     {
-        SimpleVector<int> v{ 1, 2, 3 };
-        assert(v.GetSize() == 3);
-        assert(v.GetCapacity() == 3);
-        assert(v[2] == 3);
+        SimpleVector<int> test_vector{ 1, 2, 3 };
+        assert(test_vector.GetSize() == 3);
+        assert(test_vector.GetCapacity() == 3);
+        assert(test_vector[2] == 3);
     }
 
     // At function
     {
-        SimpleVector<int> v(3);
-        assert(&v.At(2) == &v[2]);
+        SimpleVector<int> test_vector(3);
+        assert(&test_vector.At(2) == &test_vector[2]);
         try {
-            v.At(3);
+            test_vector.At(3);
             assert(false);  // !!!!!! out_of range
-        }
-        catch (const std::out_of_range&) {
-        }
-        catch (...) {
+        } catch (const std::out_of_range&) {
+        } catch (...) {
             assert(false);  // !!!!!!! NONO
         }
     }
 
     // clear
     {
-        SimpleVector<int> v(10);
-        const size_t old_capacity = v.GetCapacity();
-        v.Clear();
-        assert(v.GetSize() == 0);
-        assert(v.GetCapacity() == old_capacity);
+        SimpleVector<int> test_vector(10);
+        const size_t old_capacity = test_vector.GetCapacity();
+        test_vector.Clear();
+        assert(test_vector.GetSize() == 0);
+        assert(test_vector.GetCapacity() == old_capacity);
     }
 
     // resize
     {
-        SimpleVector<int> v(3);
-        v[2] = 17;
-        v.Resize(7);
-        assert(v.GetSize() == 7);
-        assert(v.GetCapacity() >= v.GetSize());
-        assert(v[2] == 17);
-        assert(v[3] == 0);
+        SimpleVector<int> test_vector(3);
+        test_vector[2] = 17;
+        test_vector.Resize(7);
+        assert(test_vector.GetSize() == 7);
+        assert(test_vector.GetCapacity() >= test_vector.GetSize());
+        assert(test_vector[2] == 17);
+        assert(test_vector[3] == 0);
     }
     {
-        SimpleVector<int> v(3);
-        v[0] = 42;
-        v[1] = 55;
-        const size_t old_capacity = v.GetCapacity();
-        v.Resize(2);
-        assert(v.GetSize() == 2);
-        assert(v.GetCapacity() == old_capacity);
-        assert(v[0] == 42);
-        assert(v[1] == 55);
+        SimpleVector<int> test_vector(3);
+        test_vector[0] = 42;
+        test_vector[1] = 55;
+        const size_t old_capacity = test_vector.GetCapacity();
+        test_vector.Resize(2);
+        assert(test_vector.GetSize() == 2);
+        assert(test_vector.GetCapacity() == old_capacity);
+        assert(test_vector[0] == 42);
+        assert(test_vector[1] == 55);
     }
     {
         const size_t old_size = 3;
-        SimpleVector<int> v(3);
-        v.Resize(old_size + 5);
-        v[3] = 42;
-        v.Resize(old_size);
-        v.Resize(old_size + 2);
-        assert(v[3] == 0);
+        SimpleVector<int> test_vector(3);
+        test_vector.Resize(old_size + 5);
+        test_vector[3] = 42;
+        test_vector.Resize(old_size);
+        test_vector.Resize(old_size + 2);
+        assert(test_vector[3] == 0);
     }
 
     // iterating
     {
         // empty
         {
-            SimpleVector<int> v;
-            assert(v.begin() == nullptr);
-            assert(v.end() == nullptr);
+            SimpleVector<int> test_vector;
+            assert(test_vector.begin() == nullptr);
+            assert(test_vector.end() == nullptr);
         }
 
         // not empty
         {
-            SimpleVector<int> v(10, 42);
-            assert(v.begin());
-            assert(*v.begin() == 42);
-            assert(v.end() == v.begin() + v.GetSize());
+            SimpleVector<int> test_vector(10, 42);
+            assert(test_vector.begin());
+            assert(*test_vector.begin() == 42);
+            assert(test_vector.end() == test_vector.begin() + test_vector.GetSize());
         }
     }
     cout << "Done!" << endl << endl;
@@ -124,33 +122,33 @@ inline void Test2() {
     cout << "Basic vector functionality test 2!" << endl << endl;
     // PushBack
     {
-        SimpleVector<int> v(1);
-        v.PushBack(42);
-        assert(v.GetSize() == 2);
-        assert(v.GetCapacity() >= v.GetSize());
-        assert(v[0] == 0);
-        assert(v[1] == 42);
+        SimpleVector<int> test_vector(1);
+        test_vector.PushBack(42);
+        assert(test_vector.GetSize() == 2);
+        assert(test_vector.GetCapacity() >= test_vector.GetSize());
+        assert(test_vector[0] == 0);
+        assert(test_vector[1] == 42);
     }
 
     // Еpush_back no size++
     {
-        SimpleVector<int> v(2);
-        v.Resize(1);
-        const size_t old_capacity = v.GetCapacity();
-        v.PushBack(123);
-        assert(v.GetSize() == 2);
-        assert(v.GetCapacity() == old_capacity);
+        SimpleVector<int> test_vector(2);
+        test_vector.Resize(1);
+        const size_t old_capacity = test_vector.GetCapacity();
+        test_vector.PushBack(123);
+        assert(test_vector.GetSize() == 2);
+        assert(test_vector.GetCapacity() == old_capacity);
     }
 
     // PopBack
     {
-        SimpleVector<int> v{ 0, 1, 2, 3 };
-        const size_t old_capacity = v.GetCapacity();
-        const auto old_begin = v.begin();
-        v.PopBack();
-        assert(v.GetCapacity() == old_capacity);
-        assert(v.begin() == old_begin);
-        assert((v == SimpleVector<int>{0, 1, 2}));
+        SimpleVector<int> test_vector{ 0, 1, 2, 3 };
+        const size_t old_capacity = test_vector.GetCapacity();
+        const auto old_begin = test_vector.begin();
+        test_vector.PopBack();
+        assert(test_vector.GetCapacity() == old_capacity);
+        assert(test_vector.begin() == old_begin);
+        assert((test_vector == SimpleVector<int>{0, 1, 2}));
     }
 
     // ctor copied
@@ -181,30 +179,30 @@ inline void Test2() {
 
     // swap
     {
-        SimpleVector<int> v1{ 42, 666 };
-        SimpleVector<int> v2;
-        v2.PushBack(0);
-        v2.PushBack(1);
-        v2.PushBack(2);
-        const int* const begin1 = &v1[0];
-        const int* const begin2 = &v2[0];
+        SimpleVector<int> test_vector1{ 42, 666 };
+        SimpleVector<int> test_vector2;
+        test_vector2.PushBack(0);
+        test_vector2.PushBack(1);
+        test_vector2.PushBack(2);
+        const int* const begin1 = &test_vector1[0];
+        const int* const begin2 = &test_vector2[0];
 
-        const size_t capacity1 = v1.GetCapacity();
-        const size_t capacity2 = v2.GetCapacity();
+        const size_t capacity1 = test_vector1.GetCapacity();
+        const size_t capacity2 = test_vector2.GetCapacity();
 
-        const size_t size1 = v1.GetSize();
-        const size_t size2 = v2.GetSize();
+        const size_t size1 = test_vector1.GetSize();
+        const size_t size2 = test_vector2.GetSize();
 
-        static_assert(noexcept(v1.swap(v2)));
+        static_assert(noexcept(test_vector1.swap(test_vector2)));
 
-        v1.swap(v2);
+        test_vector1.swap(test_vector2);
 
-        assert(&v2[0] == begin1);
-        assert(&v1[0] == begin2);
-        assert(v1.GetSize() == size2);
-        assert(v2.GetSize() == size1);
-        assert(v1.GetCapacity() == capacity2);
-        assert(v2.GetCapacity() == capacity1);
+        assert(&test_vector2[0] == begin1);
+        assert(&test_vector1[0] == begin2);
+        assert(test_vector1.GetSize() == size2);
+        assert(test_vector2.GetSize() == size1);
+        assert(test_vector1.GetCapacity() == capacity2);
+        assert(test_vector2.GetCapacity() == capacity1);
     }
 
     // operator =
@@ -217,70 +215,70 @@ inline void Test2() {
 
     //insert in beg mid end
     {
-        SimpleVector<int> v{ 1, 2, 3, 4 };
-        SimpleVector<int> v1;
-        SimpleVector<int> v2{ 1, 2, 3, 4 };
-        SimpleVector<int> v3{ 1, 2, 3, 4 };
-        v2.PopBack();
-        v2.PopBack();
+        SimpleVector<int> test_vector{ 1, 2, 3, 4 };
+        SimpleVector<int> test_vector1;
+        SimpleVector<int> test_vector2{ 1, 2, 3, 4 };
+        SimpleVector<int> test_vector3{ 1, 2, 3, 4 };
+        test_vector2.PopBack();
+        test_vector2.PopBack();
        
-        v3.Insert(v3.begin() + v3.GetSize(), 42);
-        assert((v3 == SimpleVector<int>{1, 2, 3, 4, 42}));
+        test_vector3.Insert(test_vector3.begin() + test_vector3.GetSize(), 42);
+        assert((test_vector3 == SimpleVector<int>{1, 2, 3, 4, 42}));
 
-        v.Insert(v.begin() + 2, 42);
-        assert((v == SimpleVector<int>{1, 2, 42, 3, 4}));
+        test_vector.Insert(test_vector.begin() + 2, 42);
+        assert((test_vector == SimpleVector<int>{1, 2, 42, 3, 4}));
 
-        v1.Insert(v1.begin(), 42);
-        assert((v1 == SimpleVector<int>{42}));
+        test_vector1.Insert(test_vector1.begin(), 42);
+        assert((test_vector1 == SimpleVector<int>{42}));
 
-        v2.Insert(v2.begin() + 1, 42);
-        assert((v2 == SimpleVector<int>{1, 42, 2}));
+        test_vector2.Insert(test_vector2.begin() + 1, 42);
+        assert((test_vector2 == SimpleVector<int>{1, 42, 2}));
     }
 
 
     {
-        SimpleVector<int> v{ 1, 2, 3, 4 };
+        SimpleVector<int> test_vector{ 1, 2, 3, 4 };
 
-        v.Erase(v.cbegin() + 2);
+        test_vector.Erase(test_vector.cbegin() + 2);
 
-        assert((v == SimpleVector<int>{1, 2, 4}));
+        assert((test_vector == SimpleVector<int>{1, 2, 4}));
     }
     cout << "Done!" << endl << endl;
 }
 
 void TestReserveConstructor() {
     cout << "TestReserveConstructor"s << endl;
-    SimpleVector<int> v(Reserve(5));
-    assert(v.GetCapacity() == 5);
-    assert(v.IsEmpty());
+    SimpleVector<int> test_vector(Reserve(5));
+    assert(test_vector.GetCapacity() == 5);
+    assert(test_vector.IsEmpty());
     cout << "Done!"s << endl;
 }
 
 void TestReserveMethod() {
     cout << "TestReserveMethod"s << endl;
-    SimpleVector<int> v;
+    SimpleVector<int> test_vector;
     // зарезервируем 5 мест в векторе
-    v.Reserve(5);
-    assert(v.GetCapacity() == 5);
-    assert(v.IsEmpty());
+    test_vector.Reserve(5);
+    assert(test_vector.GetCapacity() == 5);
+    assert(test_vector.IsEmpty());
 
     // попытаемся уменьшить capacity до 1
-    v.Reserve(1);
+    test_vector.Reserve(1);
     // capacity должно остаться прежним
-    assert(v.GetCapacity() == 5);
+    assert(test_vector.GetCapacity() == 5);
     // поместим 10 элементов в вектор
     for (int i = 0; i < 10; ++i) {
-        v.PushBack(i);
+        test_vector.PushBack(i);
     }
-    assert(v.GetSize() == 10);
+    assert(test_vector.GetSize() == 10);
     // увеличим capacity до 100
-    v.Reserve(100);
+    test_vector.Reserve(100);
     // проверим, что размер не поменялся
-    assert(v.GetSize() == 10);
-    assert(v.GetCapacity() == 100);
+    assert(test_vector.GetSize() == 10);
+    assert(test_vector.GetCapacity() == 100);
     // проверим, что элементы на месте
     for (int i = 0; i < 10; ++i) {
-        assert(v[i] == i);
+        assert(test_vector[i] == i);
     }
     cout << "Done!"s << endl;
 }

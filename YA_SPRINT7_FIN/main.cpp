@@ -7,35 +7,37 @@
 
 using namespace std;
 
-class X {
+class Xninja {
 public:
-    X()
-        : X(5) {
+    Xninja(): Xninja(5) {};
+
+    Xninja(size_t num) :Xninja_(num) {};
+
+    Xninja(const Xninja& other) = delete;
+
+    Xninja& operator=(const Xninja& other) = delete;
+
+    Xninja(Xninja&& other) {
+        this->Xninja_ = exchange(other.Xninja_, 0);
     }
-    X(size_t num)
-        : x_(num) {
-    }
-    X(const X& other) = delete;
-    X& operator=(const X& other) = delete;
-    X(X&& other) {
-        x_ = exchange(other.x_, 0);
-    }
-    X& operator=(X&& other) {
-        x_ = exchange(other.x_, 0);
+
+    Xninja& operator=(Xninja&& other) {
+        this->Xninja_ = exchange(other.Xninja_, 0);
         return *this;
     }
-    size_t GetX() const {
-        return x_;
+
+    size_t GetXninja() const {
+        return Xninja_;
     }
 
 private:
-    size_t x_;
+    size_t Xninja_;
 };
 
 SimpleVector<int> GenerateVector(size_t size) {
-    SimpleVector<int> v(size);
-    iota(v.begin(), v.end(), 1);
-    return v;
+    SimpleVector<int> test_vector(size);
+    iota(test_vector.begin(), test_vector.end(), 1);
+    return test_vector;
 }
 
 void TestTemporaryObjConstructor() {
@@ -83,17 +85,17 @@ void TestNamedMoveOperator() {
 void TestNoncopiableMoveConstructor() {
     const size_t size = 5;
     cout << "Test noncopiable object, move constructor" << endl;
-    SimpleVector<X> vector_to_move;
+    SimpleVector<Xninja> vector_to_move;
     for (size_t i = 0; i < size; ++i) {
-        vector_to_move.PushBack(X(i));
+        vector_to_move.PushBack(Xninja(i));
     }
 
-    SimpleVector<X> moved_vector = move(vector_to_move);
+    SimpleVector<Xninja> moved_vector = move(vector_to_move);
     assert(moved_vector.GetSize() == size);
     assert(vector_to_move.GetSize() == 0);
 
     for (size_t i = 0; i < size; ++i) {
-        assert(moved_vector[i].GetX() == i);
+        assert(moved_vector[i].GetXninja() == i);
     }
     cout << "Done!" << endl << endl;
 }
@@ -101,15 +103,15 @@ void TestNoncopiableMoveConstructor() {
 void TestNoncopiablePushBack() {
     const size_t size = 5;
     cout << "Test noncopiable push back" << endl;
-    SimpleVector<X> v;
+    SimpleVector<Xninja> test_vector;
     for (size_t i = 0; i < size; ++i) {
-        v.PushBack(X(i));
+        test_vector.PushBack(Xninja(i));
     }
 
-    assert(v.GetSize() == size);
+    assert(test_vector.GetSize() == size);
 
     for (size_t i = 0; i < size; ++i) {
-        assert(v[i].GetX() == i);
+        assert(test_vector[i].GetXninja() == i);
     }
     cout << "Done!" << endl << endl;
 }
@@ -117,36 +119,36 @@ void TestNoncopiablePushBack() {
 void TestNoncopiableInsert() {
     const size_t size = 5;
     cout << "Test noncopiable insert" << endl;
-    SimpleVector<X> v;
+    SimpleVector<Xninja> test_vector;
     for (size_t i = 0; i < size; ++i) {
-        v.PushBack(X(i));
+        test_vector.PushBack(Xninja(i));
     }
 
-    // в начало
-    v.Insert(v.begin(), X(size + 1));
-    assert(v.GetSize() == size + 1);
-    assert(v.begin()->GetX() == size + 1);
-    // в конец
-    v.Insert(v.end(), X(size + 2));
-    assert(v.GetSize() == size + 2);
-    assert((v.end() - 1)->GetX() == size + 2);
-    // в середину
-    v.Insert(v.begin() + 3, X(size + 3));
-    assert(v.GetSize() == size + 3);
-    assert((v.begin() + 3)->GetX() == size + 3);
+    // BEGIN
+    test_vector.Insert(test_vector.begin(), Xninja(size + 1));
+    assert(test_vector.GetSize() == size + 1);
+    assert(test_vector.begin()->GetXninja() == size + 1);
+    //END
+    test_vector.Insert(test_vector.end(), Xninja(size + 2));
+    assert(test_vector.GetSize() == size + 2);
+    assert((test_vector.end() - 1)->GetXninja() == size + 2);
+    //MIDDLE
+    test_vector.Insert(test_vector.begin() + 3, Xninja(size + 3));
+    assert(test_vector.GetSize() == size + 3);
+    assert((test_vector.begin() + 3)->GetXninja() == size + 3);
     cout << "Done!" << endl << endl;
 }
 
 void TestNoncopiableErase() {
     const size_t size = 3;
     cout << "Test noncopiable erase" << endl;
-    SimpleVector<X> v;
+    SimpleVector<Xninja> test_vector;
     for (size_t i = 0; i < size; ++i) {
-        v.PushBack(X(i));
+        test_vector.PushBack(Xninja(i));
     }
 
-    auto it = v.Erase(v.begin());
-    assert(it->GetX() == 1);
+    auto it = test_vector.Erase(test_vector.begin());
+    assert(it->GetXninja() == 1);
     cout << "Done!" << endl << endl;
 }
 

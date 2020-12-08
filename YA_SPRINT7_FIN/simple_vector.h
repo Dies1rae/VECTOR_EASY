@@ -84,8 +84,7 @@ public:
             if (rhs.size_ < this->capacity_) {
                 std::copy(rhs.begin(), rhs.end(), this->begin());
                 this->size_ = rhs.size_;
-            }
-            else {
+            } else {
                 SimpleVector tmp(std::move(rhs));
                 std::swap(tmp.items_, this->items_);
                 std::swap(tmp.size_, this->size_);
@@ -98,9 +97,9 @@ public:
     SimpleVector& operator=(SimpleVector&& rhs) {
         if (&rhs != this) {
             SimpleVector tmp(std::move(rhs));
-            std::exchange(tmp.items_, this->items_);
-            std::exchange(tmp.size_, this->size_);
-            std::exchange(tmp.capacity_, this->capacity_);
+            std::swap(tmp.items_, this->items_);
+            std::swap(tmp.size_, this->size_);
+            std::swap(tmp.capacity_, this->capacity_);
         }
         return *this;
     }
@@ -114,8 +113,8 @@ public:
     }
 
     void PushBack(const TType& item) {
-        this->Resize(this->size_ + 1);
-        this->items_[this->size_ - 1] = item;
+        auto cpy_item = item;
+        this->PushBack(std::move(cpy_item));
     }
 
     void PushBack(TType&& item) {
@@ -124,26 +123,8 @@ public:
     }
 
     Iterator Insert(ConstIterator pos, const TType& value) {
-        if (this->size_ < this->capacity_) {
-            Iterator result = this->begin() + (pos - this->cbegin());
-            for (Iterator iter = this->end(); iter != pos; --iter) {
-                *iter = *(iter - 1);
-            }
-            *result = value;
-            ++this->size_;
-            return result;
-        } else {
-            this->capacity_ == 0 ? this->capacity_ = 1 : this->capacity_ += this->capacity_;
-            TType* new_arr_tmp = new TType[this->capacity_]();
-            std::copy(this->cbegin(), pos, new_arr_tmp);
-            size_t position = pos - this->cbegin(); //SUQQQOO!  magic shiiit
-            std::fill(new_arr_tmp + position, new_arr_tmp + position + 1, value); //SUQQQOO!magic shiiit
-            std::copy(pos, this->cend(), new_arr_tmp + position + 1);
-            std::swap(new_arr_tmp, this->items_);
-            delete[] new_arr_tmp;
-            this->size_++;
-            return (this->begin() + position); //SUQQQOO!magic shiiit
-        }
+        auto cpy_item = value;
+        this->Insert(pos, std::move(cpy_item));
     }
 
     Iterator Insert(ConstIterator pos, TType&& value) {
@@ -234,7 +215,7 @@ public:
             std::swap(new_data, this->items_);
             delete[] new_data;
             for (size_t ptr = this->size_; ptr < this->capacity_; ptr++) {
-                this->items_[ptr] = std::move(0);
+                this->items_[ptr] = std::move(TType{0});
             }
         } else if (new_size > this->size_) {
             for (auto first = this->items_ + this->size_, last = this->items_ + new_size; first != last; ++first) {
